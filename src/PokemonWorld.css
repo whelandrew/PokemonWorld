@@ -1,0 +1,17 @@
+.game {
+	border-style: solid;
+	width:21%;
+	text-align:center;
+}
+
+.square {
+	border: 1px solid green;
+    box-shadow: inset 0px 0px 0px 10px red;
+    box-sizing: border-box;	
+	padding: 0;
+	background: none;
+}
+
+.grid {
+	width: 50%;
+}

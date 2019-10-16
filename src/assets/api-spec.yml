@@ -1,0 +1,87 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: The Lost Pokemon API
+servers:
+  - url: https://frozen-reef-96768.herokuapp.com/
+components:
+  requestBodies:
+    RouteCalculationBody:
+      description: Calculates the paths for a set of lost pokeon
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              sideLength:
+                type: integer
+              impassables:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Location"
+              startingLoc:
+                $ref: "#/components/schemas/Location"
+              endingLoc:
+                $ref: "#/components/schemas/Location"
+          example:
+            sideLength: 3
+            impassables:
+              - x: 1
+                y: 0
+              - x: 1
+                y: 1
+            startingLoc:
+              x: 0
+              y: 0
+            endingLoc:
+              x: 2
+              y: 2
+  schemas:
+    Location:
+      required:
+        - x
+        - y
+      properties:
+        x:
+          type: integer
+        y:
+          type: integer
+    Move:
+      type: string
+      enum:
+        - U
+        - D
+        - R
+        - L
+paths:
+  /find-path:
+    post:
+      summary: Calculate paths for a set of lost pokemon
+      operationId: calculatePaths
+      requestBody:
+        $ref: '#/components/requestBodies/RouteCalculationBody'
+      responses:
+        '400':
+          description: No path was calculable given the current map
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                example:
+                  message: "No path was calculated"
+        '200':
+          description: The fastest path by which the pokemon can reach its goal
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  moves:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Move'
+                example:
+                  moves: ['D', 'D', 'R', 'R']
